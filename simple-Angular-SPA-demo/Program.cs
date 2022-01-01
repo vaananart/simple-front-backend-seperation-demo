@@ -6,6 +6,16 @@ builder.Services
 .AddApiVersioning()
 .AddControllers();
 
+var MyAllowSpecificOrigins = "_allowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy(name: MyAllowSpecificOrigins,
+					  builder =>
+					  {
+						  builder.WithOrigins("http://localhost:4200");
+					  });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,4 +33,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action?}/{id?}");
 app.MapControllers();
+
+app.UseCors(MyAllowSpecificOrigins);
 app.Run();
